@@ -1,3 +1,5 @@
+import 'package:dart_code_metrics/src/analyzers/lint_analyzer/rules/rules_list/avoid_utc_datetime/avoid_utc_datetime.dart';
+
 import 'models/rule.dart';
 import 'rules_list/always_remove_listener/always_remove_listener.dart';
 import 'rules_list/avoid_late_keyword/avoid_late_keyword.dart';
@@ -27,6 +29,7 @@ import 'rules_list/prefer_trailing_comma/prefer_trailing_comma.dart';
 import 'rules_list/provide_correct_intl_args/provide_correct_intl_args.dart';
 
 final _implementedRules = <String, Rule Function(Map<String, Object>)>{
+  ..._customRules,
   AlwaysRemoveListenerRule.ruleId: (config) => AlwaysRemoveListenerRule(config),
   AvoidLateKeywordRule.ruleId: (config) => AvoidLateKeywordRule(config),
   AvoidNonNullAssertionRule.ruleId: (config) =>
@@ -76,3 +79,7 @@ Iterable<Rule> getRulesById(Map<String, Map<String, Object>> rulesConfig) =>
     List.unmodifiable(_implementedRules.keys
         .where((id) => rulesConfig.keys.contains(id))
         .map<Rule>((id) => _implementedRules[id]!(rulesConfig[id]!)));
+
+final _customRules = <String, Rule Function(Map<String, Object>)>{
+  AvoidUtcDateTimeRule.ruleId: (config) => AvoidUtcDateTimeRule(config),
+};
