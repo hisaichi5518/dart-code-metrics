@@ -22,14 +22,13 @@ class LintConsoleReporterHelper {
     MetricValueLevel.none: '',
   };
 
-  static final _severityColors = {
-    Severity.error: AnsiPen()..red(),
-    Severity.warning: AnsiPen()..yellow(),
+  final _severityPens = {
+    Severity.error: AnsiPen()..red(bold: true),
+    Severity.warning: AnsiPen()..yellow(bold: true),
+    Severity.performance: AnsiPen()..cyan(),
     Severity.style: AnsiPen()..blue(),
+    Severity.none: AnsiPen()..white(),
   };
-
-  static final _designIssuesColor = AnsiPen()..yellow();
-  static const _designIssues = 'Design';
 
   String getIssueMessage(Issue issue, String severity) {
     final position = _getPosition(issue.location);
@@ -39,17 +38,16 @@ class LintConsoleReporterHelper {
   }
 
   String getSeverity(Severity severity) {
-    final color = _severityColors[severity];
+    final color = _severityPens[severity];
 
     if (color != null) {
-      return color(_normalize(severity.toString().capitalize()));
+      return color(_normalize(
+        severity != Severity.none ? severity.toString().capitalize() : '',
+      ));
     }
 
     throw StateError('Unexpected severity.');
   }
-
-  String getSeverityForAntiPattern() =>
-      _designIssuesColor(_normalize(_designIssues));
 
   String getMetricReport(MetricValue<num> metric, String humanReadableName) {
     final color = _colorPens[metric.level];
